@@ -1,6 +1,6 @@
 # dora-skills
 
-A collection of 17 Claude Code skills focused on engineering practices that improve [DORA metrics](https://dora.dev/). Use these skills to get actionable, context-aware guidance on shipping software faster and more reliably.
+A collection of Claude Code skills and agents focused on engineering practices that improve [DORA metrics](https://dora.dev/). Use these skills to get actionable, context-aware guidance on shipping software faster and more reliably.
 
 ---
 
@@ -106,8 +106,32 @@ Start with the `dora-overview` skill if you're unsure which practice to focus on
 
 ---
 
+## Agents
+
+In addition to skills (which provide guidance), this plugin includes **agents** — autonomous workers that analyze your codebase and make changes based on DORA practices.
+
+| Agent | What It Does |
+|---|---|
+| `dora-review` | Reviews your working tree changes against DORA practices, fixes issues, and outputs a report |
+| `dora-health-check` | Audits the entire repo, scores each practice area, makes safe additive improvements |
+| `dora-improve` | Given a DORA metric, makes targeted changes to improve that specific metric |
+
+### Running Agents
+
+```
+/agents dora-review
+/agents dora-health-check
+/agents dora-improve mttr
+```
+
+- **dora-review** operates on your current working tree (staged + unstaged changes). It leaves its fixes unstaged so you can review them with `git diff`.
+- **dora-health-check** scans the full repo and produces a scorecard of all 17 practices.
+- **dora-improve** takes one of four metrics as input: `frequency`, `lead-time`, `failure-rate`, or `mttr`.
+
+---
+
 ## Project Purpose
 
-This repo exists to make DORA-aligned engineering practices accessible and actionable through Claude Code. Rather than reading a doc and hoping it sticks, each skill guides you through applying a practice in the context of real work you're already doing.
+This repo exists to make DORA-aligned engineering practices accessible and actionable through Claude Code. Skills provide guidance when you need it; agents actively review and improve your code against DORA principles. Rather than reading a doc and hoping it sticks, each skill and agent helps you apply practices in the context of real work you're already doing.
 
-The skills are designed for personal use but written to be shareable. Contributions and forks welcome.
+The skills and agents are designed for personal use but written to be shareable. Contributions and forks welcome.
