@@ -1,6 +1,6 @@
 ---
 name: loose-coupling
-description: Use when designing system boundaries, service interfaces, or when failures cascade
+description: Always apply when designing module or service boundaries — enforce failure isolation, explicit interfaces, and no shared state
 ---
 
 # Loose Coupling

@@ -1,6 +1,6 @@
 ---
 name: configuration-as-code
-description: Use when managing environment config, deployment settings, or infrastructure parameters
+description: Always apply when adding or changing configuration — all config must be version-controlled, secrets referenced by name never by value
 ---
 
 # Configuration as Code

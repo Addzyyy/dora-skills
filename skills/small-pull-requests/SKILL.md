@@ -1,6 +1,6 @@
 ---
 name: small-pull-requests
-description: Use when PRs are large, slow to review, or bundle multiple unrelated changes into one review unit
+description: Always apply when opening or reviewing pull requests — PRs must be focused, under 400 lines, and single-purpose
 ---
 
 # Small Pull Requests

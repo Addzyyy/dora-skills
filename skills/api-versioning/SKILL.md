@@ -1,6 +1,6 @@
 ---
 name: api-versioning
-description: Use when evolving API interfaces, choosing versioning strategies, or managing breaking changes across consumers
+description: Always apply when changing API endpoints — version breaking changes, set sunset dates, and ship new alongside old
 ---
 
 # API Versioning

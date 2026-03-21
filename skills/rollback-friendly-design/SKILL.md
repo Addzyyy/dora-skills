@@ -1,6 +1,6 @@
 ---
 name: rollback-friendly-design
-description: Use when designing deployment strategies, code artifacts, or feature releases for safe rollback
+description: Always apply when writing code that will be deployed — new code and old code must coexist, rollback must be safe and instant
 ---
 
 # Rollback-Friendly Design

@@ -1,6 +1,6 @@
 ---
 name: backward-compatible-migrations
-description: Use when writing database schema changes, data migrations, or storage-layer transformations that must not break running code
+description: Always apply when writing schema changes or data migrations — use expand-contract, new columns must be nullable, schema deploys before code
 ---
 
 # Backward-Compatible Migrations

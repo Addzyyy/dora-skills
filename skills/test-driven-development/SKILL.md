@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: Use when implementing any feature or bugfix, before writing implementation code
+description: Always apply before writing any new code — write the failing test first, then implement
 ---
 
 # Test-Driven Development

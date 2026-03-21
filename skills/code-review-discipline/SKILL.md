@@ -1,6 +1,6 @@
 ---
 name: code-review-discipline
-description: Use when reviewing code, setting up review processes, or when reviews are rubber-stamps
+description: Always apply when reviewing code — check correctness, security, maintainability, and test coverage on every review
 ---
 
 # Code Review Discipline

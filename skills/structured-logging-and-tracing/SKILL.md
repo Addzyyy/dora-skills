@@ -1,6 +1,6 @@
 ---
 name: structured-logging-and-tracing
-description: Use when implementing log formats, correlation IDs, trace context propagation, or structured log schemas
+description: Always apply when adding logging or error handling — use structured JSON logs with trace IDs, never free-form strings
 ---
 
 # Structured Logging and Tracing

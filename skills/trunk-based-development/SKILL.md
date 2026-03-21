@@ -1,6 +1,6 @@
 ---
 name: trunk-based-development
-description: Use when working with branches, deciding branching strategy, or when branches are long-lived
+description: Always apply when creating branches or merging — branches must be short-lived and merge to main daily
 ---
 
 # Trunk-Based Development

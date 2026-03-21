@@ -1,6 +1,6 @@
 ---
 name: feature-flags
-description: Use when deploying incomplete features, needing instant rollback, or decoupling deploy from release
+description: Always apply when shipping new features — wrap in feature flags to decouple deployment from release and enable instant rollback
 ---
 
 # Feature Flags

@@ -1,6 +1,6 @@
 ---
 name: contract-testing
-description: Use when validating that API changes don't break existing consumers, or setting up consumer-driven test suites
+description: Always apply when changing APIs that have consumers — verify contracts before merging, consumer owns the contract
 ---
 
 # Contract Testing

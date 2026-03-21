@@ -1,6 +1,6 @@
 ---
 name: small-incremental-commits
-description: Use when commits bundle unrelated changes, or a single logical change spans multiple concerns
+description: Always apply when committing code — each commit must be one logical change that compiles and passes tests independently
 ---
 
 # Small, Incremental Commits

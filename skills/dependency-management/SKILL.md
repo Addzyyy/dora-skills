@@ -1,6 +1,6 @@
 ---
 name: dependency-management
-description: Use when adding, updating, or auditing project dependencies
+description: Always apply when adding or updating dependencies — lock exact versions, commit lockfiles, scan for vulnerabilities
 ---
 
 # Dependency Management

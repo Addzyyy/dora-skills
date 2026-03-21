@@ -1,6 +1,6 @@
 ---
 name: observability-aware-coding
-description: Use when designing code for production debuggability — deciding what to instrument, where to add metrics, and how to expose internal state
+description: Always apply when writing code that handles requests, calls external services, or makes business decisions — instrument every boundary
 ---
 
 # Observability-Aware Coding

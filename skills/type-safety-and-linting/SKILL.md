@@ -1,6 +1,6 @@
 ---
 name: type-safety-and-linting
-description: Use when setting up or improving static analysis, type checking, or linting rules
+description: Always apply when writing code in typed languages — enable strict type checking, make linting a CI gate, encode invariants in types
 ---
 
 # Type Safety and Linting
