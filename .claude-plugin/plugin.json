@@ -1,9 +1,10 @@
 {
   "name": "dora-skills",
-  "version": "1.0.0",
-  "description": "17 Claude Code skills for engineering practices that improve DORA metrics (Deployment Frequency, Lead Time, Change Failure Rate, MTTR)",
+  "version": "1.1.0",
+  "description": "Claude Code skills and agents for engineering practices that improve DORA metrics (Deployment Frequency, Lead Time, Change Failure Rate, MTTR)",
   "repository": "",
   "license": "MIT",
-  "keywords": ["dora", "devops", "deployment", "testing", "observability", "tdd", "code-review"],
-  "skills": "./skills/"
+  "keywords": ["dora", "devops", "deployment", "testing", "observability", "tdd", "code-review", "agents"],
+  "skills": "./skills/",
+  "agents": "./agents/"
 }
