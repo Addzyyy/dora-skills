@@ -13,6 +13,21 @@ Add three autonomous agents to the dora-skills plugin that actively analyze and 
 - **Structure:** Standalone agents (one markdown file per agent, no shared base)
 - **Approach A** selected: each agent is self-contained in `agents/<name>.md`
 
+## Agent File Format
+
+Each agent is a markdown file with YAML frontmatter:
+
+```markdown
+---
+name: agent-name
+description: One-line description of what the agent does
+---
+
+System prompt content here — this is the full agent prompt.
+```
+
+No `tools` or `model` fields — agents inherit full tool access and the user's model. The markdown body *is* the system prompt. Each agent's prompt references DORA practice principles (drawn from the relevant skills) but does not inline full skill content. Skills provide the deep reference; agents provide the actionable workflow. Since agents contain their own condensed guidance, skill updates do not require agent changes unless the core principles change.
+
 ## Plugin Structure Change
 
 ```
@@ -32,15 +47,35 @@ dora-skills/
 "agents": "./agents/"
 ```
 
+The plugin description should be updated to:
+```
+"description": "Claude Code skills and agents for engineering practices that improve DORA metrics (Deployment Frequency, Lead Time, Change Failure Rate, MTTR)"
+```
+
+## Scope Distinction: dora-health-check vs dora-improve
+
+These two agents both scan the full repo but serve different purposes:
+
+- **dora-health-check** is a broad audit — it scores all 17 practices and makes only low-risk additive fixes (adding configs, scaffolding test directories, etc.). Its primary output is the scorecard and recommendations.
+- **dora-improve** is a focused remediation — given one metric, it makes substantive code changes targeting that metric's practices. It goes deeper on fewer practices.
+
+Running `dora-improve` four times is not equivalent to `dora-health-check`. The health check is lighter-touch and report-oriented; improve is heavier and change-oriented.
+
+## dora-improve Input
+
+The metric is passed as a natural language argument when invoking the agent. Valid values: `frequency`, `lead-time`, `failure-rate`, `mttr`. If the user provides an ambiguous or missing metric, the agent should ask which of the four metrics to target.
+
 ## Agent 1: dora-review
 
 **Purpose:** Reviews working tree changes against DORA practices, fixes issues, outputs a report.
 
 **Workflow:**
 1. Run `git diff` (unstaged) and `git diff --cached` (staged) to get current changes
-2. Analyze changes against DORA practices: commit hygiene, change size, coupling, testability, rollback safety, observability, config management
-3. Make fixes directly — split oversized changes, add missing structured logging, improve test coverage, refactor tightly-coupled code
-4. Output a report: what was found, what was changed, what couldn't be fixed automatically (with recommendations)
+2. If no changes found, inform the user and exit
+3. Analyze changes against DORA practices: commit hygiene, change size, coupling, testability, rollback safety, observability, config management
+4. Make fixes directly — add missing structured logging, improve test coverage, refactor tightly-coupled code
+5. All changes are left unstaged so the user can review them via `git diff` before staging
+6. Output a report: what was found, what was changed, what couldn't be fixed automatically (with recommendations)
 
 **Relevant skills:** small-incremental-commits, small-pull-requests, code-review-discipline, loose-coupling, rollback-friendly-design, observability-aware-coding, test-driven-development
 
@@ -49,13 +84,13 @@ dora-skills/
 ## DORA Review Report
 
 ### Changes Made
-- Split 3 unrelated concerns into separate staged groups
 - Added structured logging to new API handler
 - Wrapped new feature in feature flag check
+- Added unit test for new validation logic
 
 ### Recommendations (manual)
 - Consider splitting this into 2 PRs: the refactor and the new behavior
-- No tests found for the new validation logic
+- 3 unrelated concerns in one commit — stage and commit separately
 ```
 
 ## Agent 2: dora-health-check
@@ -64,8 +99,8 @@ dora-skills/
 
 **Workflow:**
 1. Scan repo structure — test coverage patterns, config management, branching strategy (git log, git branch), dependency setup, logging patterns, CI/CD config
-2. Score each DORA practice area: present / partial / missing
-3. Make fixes where safe — add missing test directories, fix config-in-code violations, add linting configs, improve logging patterns
+2. Score each DORA practice area using heuristic LLM judgment: present / partial / missing (based on evidence found in the repo — e.g., test files exist, structured log calls present, short-lived branches)
+3. Make low-risk additive fixes — add missing test directories, add linting configs, improve logging patterns. Does not delete or restructure existing code
 4. Output a health report with scores, changes made, and prioritized recommendations
 
 **Relevant skills:** All 17 — this is the comprehensive audit agent
