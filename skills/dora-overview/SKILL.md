@@ -1,9 +1,25 @@
 ---
 name: dora-overview
-description: Use when discussing software delivery performance, DORA metrics, deployment pipeline improvements, or engineering team effectiveness
+description: Always apply when writing, reviewing, or planning code changes — this is the central router for all DORA engineering practices and agents
 ---
 
-# DORA Metrics Overview
+# DORA Practices — Active Enforcement
+
+**This is not reference material. These are standing instructions.**
+
+When this skill is loaded, you MUST actively apply DORA practices throughout the session. Do not wait to be asked. Do not treat these as suggestions. Load the specific practice skills listed below based on what you are doing, and run the agents at the checkpoints described.
+
+## Standing Rules
+
+1. **Write tests first.** Load `test-driven-development` before writing any implementation code.
+2. **Commit after every passing change.** Do not batch multiple modules into one commit.
+3. **Push immediately after committing.** Keep the feedback loop tight.
+4. **Load relevant skills before starting work.** See the router table below.
+5. **Run `dora-review` agent after completing any set of changes.** Do not skip this.
+6. **Run `dora-health-check` agent at the start of a new project or major task.**
+7. **Never optimize for speed over process.**
+
+## The 4 DORA Metrics
 
 DORA (DevOps Research and Assessment) research identified four key metrics that distinguish high-performing engineering teams. These metrics measure both throughput (how fast you deliver) and stability (how reliably you deliver).
 
@@ -84,22 +100,33 @@ Answer these questions to identify where to invest first:
 
 - **"Does it take too long to recover from incidents?"** — Focus on **MTTR** skills: `structured-logging-and-tracing`, `loose-coupling`, `rollback-friendly-design`, `feature-flags`, `configuration-as-code`, `observability-aware-coding`, `api-versioning`, `backward-compatible-migrations`
 
-## Router Guidance
+## Skill Router — Load These Automatically
 
-When a user's question maps to a specific metric, load the corresponding practice skills:
+Do not wait for the user to ask. When you detect any of these activities, load the corresponding skills immediately:
 
-**Deployment Frequency**: Load `small-incremental-commits`, `trunk-based-development`, `feature-flags`, `configuration-as-code`
+| Activity | Load these skills |
+|----------|-------------------|
+| Writing any new code | `test-driven-development` |
+| Making commits | `small-incremental-commits` |
+| Creating or merging branches | `trunk-based-development` |
+| Opening or reviewing a PR | `small-pull-requests`, `code-review-discipline` |
+| Designing module or service boundaries | `loose-coupling` |
+| Adding or changing API endpoints | `api-versioning`, `contract-testing` |
+| Writing database migrations | `backward-compatible-migrations` |
+| Adding logging or error handling | `structured-logging-and-tracing`, `observability-aware-coding` |
+| Managing config or environment values | `configuration-as-code` |
+| Planning a deployment or release | `rollback-friendly-design`, `feature-flags` |
+| Adding or updating dependencies | `dependency-management` |
+| Setting up linting or type checking | `type-safety-and-linting` |
 
-**Lead Time for Changes**: Load `small-pull-requests`, `small-incremental-commits`, `trunk-based-development`, `test-driven-development`, `dependency-management`
+## Agent Checkpoints — Run These Automatically
 
-**Change Failure Rate**: Load `test-driven-development`, `code-review-discipline`, `type-safety-and-linting`, `contract-testing`, `api-versioning`, `observability-aware-coding`, `dependency-management`, `backward-compatible-migrations`
-
-**MTTR**: Load `structured-logging-and-tracing`, `loose-coupling`, `rollback-friendly-design`, `feature-flags`, `configuration-as-code`, `observability-aware-coding`, `api-versioning`, `backward-compatible-migrations`
+| Checkpoint | Run this agent |
+|------------|----------------|
+| After completing a set of changes | `dora-review` |
+| Start of a new project or major task | `dora-health-check` |
+| When a specific DORA metric needs improvement | `dora-improve` with the metric name |
 
 ## How Skills Compose
 
-Skills in this collection are **complementary, not conflicting**. You can load multiple practice skills simultaneously — they address different aspects of the same delivery pipeline.
-
-**Specificity wins**: When a user's context is specific (e.g., "our canary deployments keep failing"), load the more-specific skill (`rollback-friendly-design`, `observability-aware-coding`) rather than staying at the overview level. This skill serves as the entry point; the practice skills provide the actionable depth.
-
-**Each skill is self-contained**: Every practice skill works independently. Users don't need to read this overview to benefit from a specific practice skill. Load whichever skills match the problem at hand.
+Skills are **complementary, not conflicting**. Load multiple skills simultaneously — they address different aspects of the same delivery pipeline. When the user's context is specific, load the most specific skill rather than staying at this overview level.
