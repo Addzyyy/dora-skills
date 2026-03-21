@@ -45,14 +45,35 @@ High-performing teams deploy frequently, ship fast, break things rarely, and rec
 
 ## Installation
 
-### Option 1: Symlink skills into Claude's skill directory
+### Option 1: Install as a plugin from git (recommended)
+
+```bash
+claude plugin install dora-skills@https://github.com/your-username/dora-skills
+```
+
+Skills are namespaced automatically (e.g., `/dora-skills:trunk-based-development`).
+
+### Option 2: Install as a plugin from a local clone
+
+```bash
+git clone <repo-url> ~/dora-skills
+claude plugin install ~/dora-skills --scope user
+```
+
+Or for development/testing:
+
+```bash
+claude --plugin-dir ~/dora-skills
+```
+
+### Option 3: Symlink skills into Claude's skill directory
 
 ```bash
 git clone <repo-url> ~/dora-skills
 ln -s ~/dora-skills/skills/* ~/.claude/skills/
 ```
 
-### Option 2: Reference via CLAUDE.md
+### Option 4: Reference via CLAUDE.md
 
 Add the following line to your project's `CLAUDE.md` to make the skills available in that project:
 
@@ -62,10 +83,6 @@ Add the following line to your project's `CLAUDE.md` to make the skills availabl
 
 Replace `path/to/dora-skills` with the actual path where you cloned this repo (e.g., `~/dora-skills`).
 
-### Option 3: Copy skills directly
-
-Copy individual skill files from `skills/` into `~/.claude/skills/` to pick only the ones you want.
-
 ---
 
 ## Usage
@@ -73,12 +90,19 @@ Copy individual skill files from `skills/` into `~/.claude/skills/` to pick only
 Once installed, invoke skills by name in Claude Code:
 
 ```
-/dora-overview
-/small-pull-requests
-/test-driven-development
+/dora-skills:dora-overview
+/dora-skills:small-pull-requests
+/dora-skills:test-driven-development
 ```
 
-Start with `/dora-overview` if you're unsure which practice to focus on — it will ask about your current pain points and route you to the most relevant skill.
+If installed via symlink (Option 3), skills are available without the namespace prefix:
+
+```
+/dora-overview
+/small-pull-requests
+```
+
+Start with the `dora-overview` skill if you're unsure which practice to focus on — it will ask about your current pain points and route you to the most relevant skill.
 
 ---
 
