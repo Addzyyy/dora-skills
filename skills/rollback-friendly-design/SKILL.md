@@ -33,31 +33,33 @@ Rollback-friendly design means new code and old code can coexist on the same inf
 **Before — deploy that cannot be rolled back:**
 
 ```
-Step 1: rename column  users.name → users.full_name  (migration)
-Step 2: deploy new code that reads users.full_name
+Version 2 of the API changes the response format:
+  GET /orders → { "items": [...] }         (v1)
+  GET /orders → { "order_items": [...] }   (v2)
 
-If new code has a bug:
-  → rollback code to old version
-  → old code reads users.name, which no longer exists
-  → rollback causes an outage worse than the original bug
+Deploy v2 code. Mobile clients still expect "items" field.
+  → rollback to v1 code
+  → but v1 config was overwritten by v2 deploy
+  → rollback fails, both versions are broken
 ```
 
 **After — deploy where old and new code coexist:**
 
 ```
 Phase 1 (expand):
-  Add column users.full_name alongside users.name
-  Deploy code that writes to BOTH columns, reads from users.name
+  Deploy code that returns BOTH fields:
+    { "items": [...], "order_items": [...] }
+  Old and new clients both work.
 
 Phase 2 (migrate):
-  Backfill users.full_name for existing rows
-  Deploy code that reads from users.full_name, still writes both
+  Update clients to read "order_items"
+  Monitor: are any clients still reading "items"?
 
 Phase 3 (contract):
-  Verify users.name is no longer read by any running code
-  Drop users.name
+  Remove "items" field once no client reads it
 
-Rollback is safe at any point in Phase 1 or 2.
+Rollback is safe at any point in Phase 1 or 2 —
+old code only added a field, never removed one.
 ```
 
 ## Expand-Contract Pattern
