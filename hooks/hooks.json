@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cat <<'DORA'\nDORA practices are active for this session. Follow these rules:\n\n1. WRITE TESTS FIRST. No implementation code before a failing test exists.\n2. SMALL COMMITS. Each commit is one logical change. If the message needs \"and\", split it.\n3. COMMIT OFTEN. After each module or feature passes tests, commit immediately. Do not batch.\n4. LOAD SKILLS. Before writing code, load the dora-skills that apply to the task:\n   - Writing code? Load test-driven-development\n   - Creating a branch? Load trunk-based-development\n   - Making a PR? Load small-pull-requests\n   - Adding logging? Load structured-logging-and-tracing\n   - Designing boundaries? Load loose-coupling\n   - Changing APIs? Load api-versioning, contract-testing\n   - Writing migrations? Load backward-compatible-migrations\n   - Adding config? Load configuration-as-code\n   - Deploying? Load rollback-friendly-design, feature-flags\n5. RUN AGENTS at checkpoints:\n   - After completing changes: run dora-review agent\n   - Start of a new project: run dora-health-check agent\n   - When a DORA metric needs improvement: run dora-improve agent\n6. NEVER skip these practices for speed. The process IS the work.\nDORA"
+          }
+        ]
+      }
+    ]
+  }
+}
