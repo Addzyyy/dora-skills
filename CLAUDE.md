@@ -47,6 +47,16 @@ Each PR is small, focused, and independently reviewable. They merge bottom-up.
 | Set up linting or type checking | `type-safety-and-linting` |
 | Encounter ambiguity, spec gaps, or unexpected state | `stop-and-clarify` |
 
+## Parallel Agents
+
+When a task involves independent pieces of work, use multiple agents to work in parallel. For example:
+- Writing tests for module A while implementing module B (if the interface is already defined)
+- Running `dora-review` on completed changes while starting TDD on the next module
+- Loading and applying multiple skills simultaneously when they cover independent concerns (e.g., `structured-logging-and-tracing` for logging code while `contract-testing` for API boundaries)
+- Running `dora-health-check` in the background while beginning work on the first module
+
+The key constraint: each agent must work on independent files/concerns. Do not parallelize work that has dependencies between agents.
+
 ## Agent Checkpoints
 
 | When | Run this |
