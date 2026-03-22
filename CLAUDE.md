@@ -14,7 +14,20 @@ This plugin enforces engineering practices that improve DORA metrics. These are 
 1. **Commit immediately.** One logical change per commit. If the message needs "and", split it.
 2. **Push to the branch.** Keep the feedback loop tight.
 3. **Run dora-review agent.** It checks your changes against DORA practices and fixes issues.
-4. **Only then start the next piece of work.**
+4. **Open a PR.** Do not ask the user — just open it. Use `gh pr create` with a clear title and description.
+5. **Keep going.** Do not stop between modules. Create the next feature branch off the current one and continue working. PRs are merged bottom-up as they get approved.
+
+## Stacked PR Workflow (Default for Multi-Module Tasks)
+
+When a task involves multiple modules, features, or logical units of work, use stacked PRs — do not stop between them:
+
+1. Create `feat/first-module` branch from main
+2. TDD, implement, commit, push, dora-review, open PR
+3. Create `feat/second-module` branch **off the current branch** (not main)
+4. TDD, implement, commit, push, dora-review, open PR targeting the previous branch
+5. Repeat until all modules are complete — never pause to wait for review
+
+Each PR is small, focused, and independently reviewable. They merge bottom-up.
 
 ## Skill Router — Load Based on Activity
 
