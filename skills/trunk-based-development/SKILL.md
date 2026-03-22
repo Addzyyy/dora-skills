@@ -72,10 +72,13 @@ The feature ships continuously; users only see it when it is ready. See the `fea
 | Main branch | Always green; never commit broken code directly |
 | Release branches | Cut from main when needed; never merge back to main |
 
-**How to handle a feature too large for one day:**
+**How to handle a feature too large for one day — use stacked PRs:**
 1. Decompose into independently mergeable slices
-2. Guard incomplete slices with a feature flag
-3. Merge each slice to main as soon as it compiles and tests pass
+2. Create branch `feat/slice-1` from main, implement, commit, push, open PR
+3. Create branch `feat/slice-2` from `feat/slice-1` (not main), keep working
+4. Each PR targets the previous branch; they merge bottom-up
+5. Do not stop between slices — keep the momentum going
+6. Guard incomplete slices with a feature flag if needed
 
 ## Common Mistakes
 

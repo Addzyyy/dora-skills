@@ -73,7 +73,17 @@ Each PR has one clear purpose. Reviewers focus on one layer at a time.
 | By layer | Data model → API → UI, each as its own PR |
 | By concern | Refactor first, then new behavior on top |
 | By risk | High-risk changes alone; low-risk changes batched together |
-| By stacking | PR B targets the branch of PR A; merge in order |
+| **By stacking (default)** | **PR B branches off PR A's branch; each PR targets the previous one; merge bottom-up** |
+
+**Stacked PRs are the default for multi-module work.** Do not stop between PRs. The workflow is continuous:
+
+```
+1. feat/module-a (from main) → TDD → commit → push → open PR → keep going
+2. feat/module-b (from feat/module-a) → TDD → commit → push → open PR targeting module-a → keep going
+3. feat/module-c (from feat/module-b) → TDD → commit → push → open PR targeting module-b
+```
+
+Open each PR immediately with `gh pr create` — do not ask the user, just do it. PRs merge bottom-up as they get approved.
 
 **Self-review checklist before opening:**
 
