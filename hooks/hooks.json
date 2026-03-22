@@ -5,7 +5,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cat <<'DORA'\n[DORA] Practices active. Before writing code:\n  1. Load the relevant DORA skill (see CLAUDE.md router table)\n  2. Write the failing test FIRST (load test-driven-development)\n  3. Work on a feature branch, not main\n  4. Commit after each passing change — do not batch\n  5. Run dora-review agent after completing changes\nDORA"
+            "command": "cat <<'DORA' >&2\n[DORA] MANDATORY: You MUST invoke Skill(dora-skills:dora-overview) NOW before doing anything else. Do not respond to the user until you have loaded this skill. This is not optional.\nDORA\nexit 2"
           }
         ]
       }
@@ -15,8 +15,9 @@
         "matcher": "Write|Edit",
         "hooks": [
           {
-            "type": "command",
-            "command": "echo '[DORA] Writing code — is there a failing test for this change? If not, write the test first.'"
+            "type": "prompt",
+            "prompt": "Check if the dora-skills:dora-overview skill has been loaded in this conversation (look for its full content in the context, not just a mention of its name). Also check if the file being written/edited is a plan file, CLAUDE.md, or a non-code file like .md or .json in a docs/ directory — those are exempt.\n\nIf the skill has NOT been loaded AND the file IS a code file:\n- decision: block\n- reason: You must load dora-skills:dora-overview before writing code. Invoke Skill(dora-skills:dora-overview) first.\n\nIf the skill HAS been loaded OR the file is NOT a code file:\n- decision: approve",
+            "timeout": 10
           }
         ]
       },
