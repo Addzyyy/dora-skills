@@ -68,6 +68,141 @@ For every change, evaluate against these principles:
 - Refactor tightly-coupled code into clearer boundaries
 - Fix hardcoded configuration values
 
+## Fix Recipes
+
+When you find issues, apply these concrete patterns:
+
+### Adding structured logging at a boundary
+
+Before:
+```
+console.log("calling payment service")
+```
+
+After:
+```
+logger.info({ action: "payment_call_started", order_id: orderId, trace_id: traceId })
+```
+
+### Wrapping a feature in a flag
+
+Before:
+```
+return renderNewDashboard(user)
+```
+
+After:
+```
+if (isEnabled("new_dashboard", user.id)) {
+  return renderNewDashboard(user)
+}
+return renderLegacyDashboard(user)
+```
+
+### Adding timeout to an external call
+
+Before:
+```
+const response = await fetch(url)
+```
+
+After:
+```
+const controller = new AbortController()
+const timeout = setTimeout(() => controller.abort(), 5000)
+const response = await fetch(url, { signal: controller.signal }).finally(() => clearTimeout(timeout))
+```
+
+### Enriching an error with context
+
+Before:
+```
+throw new Error("database error")
+```
+
+After:
+```
+throw new Error(`User lookup failed for userId=${userId} after ${elapsed}ms: ${err.message}`)
+```
+
+### Extracting hardcoded config to environment
+
+Before:
+```
+const API_URL = "http://localhost:3000/api"
+```
+
+After:
+```
+const API_URL = process.env.API_URL ?? "http://localhost:3000/api"
+```
+
+### Adding a missing test for new behavior
+
+Before (no test exists):
+```
+export function calculateDiscount(price: number, tier: string): number {
+  if (tier === "premium") return price * 0.2
+  return 0
+}
+```
+
+After (test added):
+```
+describe("calculateDiscount", () => {
+  it("returns 20% discount for premium tier", () => {
+    expect(calculateDiscount(100, "premium")).toBe(20)
+  })
+  it("returns 0 for non-premium tier", () => {
+    expect(calculateDiscount(100, "basic")).toBe(0)
+  })
+})
+```
+
+### Adding error handling to an external call
+
+Before:
+```
+const data = await client.query("SELECT * FROM users WHERE id = $1", [id])
+return data.rows[0]
+```
+
+After:
+```
+try {
+  const data = await client.query("SELECT * FROM users WHERE id = $1", [id])
+  return data.rows[0]
+} catch (err) {
+  logger.error({ action: "user_lookup_failed", user_id: id, error: err.message, trace_id: traceId })
+  throw new Error(`User lookup failed for id=${id}: ${err.message}`)
+}
+```
+
+## Severity Classification
+
+**Blocking** (must fix before merge):
+- Missing tests for new behavior
+- Hardcoded secrets or credentials in source code
+- No error handling on external calls (DB, HTTP, file I/O)
+- Breaking API change without versioning
+- SQL injection or other security vulnerabilities
+- Destructive migration (DROP/RENAME) without expand-contract pattern
+
+**Warning** (fix if possible, suggest otherwise):
+- Missing structured logging at service boundaries
+- No feature flag on new user-facing behavior
+- Commit bundles unrelated changes (suggest splitting)
+- Missing timeout on external HTTP/RPC calls
+- Hardcoded config values (URLs, ports, hosts)
+- Error messages without contextual information (who, what, why)
+
+**Info** (note in report, do not fix):
+- PR could be split into smaller pieces
+- Existing untested code not introduced by this change
+- Architecture suggestions for future consideration
+- Missing observability for pre-existing code paths
+- Style preferences not enforced by linter
+
 ## What NOT to Fix (recommend instead)
 
 - Splitting commits or PRs (the user controls their git workflow)
