@@ -1,6 +1,6 @@
 ---
 name: small-pull-requests
-description: Always apply when opening or reviewing pull requests — PRs must be focused, under 400 lines, and single-purpose
+description: Apply when creating PRs, reviewing code, splitting large changesets, writing PR descriptions, planning stacked PRs, or optimizing review turnaround — PRs must be focused, under 400 lines, and single-purpose
 ---
 
 # Small Pull Requests
@@ -119,3 +119,9 @@ List any PRs that must merge first.
 | Waiting until a feature is complete to open a PR | The PR grows for days before anyone sees it | Open a draft PR on day one and stack subsequent PRs |
 | Skipping a description on a small PR | Reviewers still need context about why | Fill the description template even for a 50-line change |
 | Splitting so finely that each PR has no standalone value | Fragmented history; each PR depends on the last | Split by logical concern, not by arbitrary line count |
+
+## Related Skills
+
+- **small-incremental-commits** — focused commits are the building blocks of focused PRs
+- **code-review-discipline** — smaller PRs get deeper, more thorough reviews
+- **trunk-based-development** — small PRs merge fast, keeping branches short-lived and close to main

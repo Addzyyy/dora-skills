@@ -1,6 +1,6 @@
 ---
 name: rollback-friendly-design
-description: Always apply when writing code that will be deployed — new code and old code must coexist, rollback must be safe and instant
+description: Apply when writing any deployed code, DB schema changes, API changes, migrations, feature flags, config changes, or deployment plans — covers rollback safety, blue-green/canary deploys, backward compatibility, and one-way door decisions
 ---
 
 # Rollback-Friendly Design
@@ -115,3 +115,9 @@ If any answer is NO → apply expand-contract before deploying.
 | No rollback plan documented | Incident pressure leads to improvised rollback that causes more damage | Write rollback steps before the deploy, not during the incident |
 | Blue-green with shared database | Schema change makes old environment invalid | Make schema changes backward-compatible before switching traffic |
 | Feature flag not tested in OFF state | Rollback (flag OFF) hits untested code paths | CI must test both flag states |
+
+## Related Skills
+
+- **backward-compatible-migrations** — schema changes must preserve rollback safety for the previous code version
+- **feature-flags** — flags provide instant behavioral rollback without redeploying
+- **api-versioning** — versioned API endpoints enable safe rollback by keeping old versions alive

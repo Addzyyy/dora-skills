@@ -1,6 +1,6 @@
 ---
 name: contract-testing
-description: Always apply when changing APIs that have consumers — verify contracts before merging, consumer owns the contract
+description: Apply when changing API schemas, service-to-service integration, microservice boundaries, GraphQL schemas, or protobuf definitions. Verify consumer contracts before merging — the consumer owns the contract
 ---
 
 # Contract Testing
@@ -121,3 +121,9 @@ For breaking changes: version the API or negotiate a migration window with consu
 | Verifying contracts only in staging | Breaking changes discovered too late | Run provider verification in CI on every PR, against the contract broker |
 | Treating contract tests as a replacement for integration tests | Contract tests verify the interface; they do not test emergent behavior | Run both; use contracts for fast feedback and integration tests for end-to-end confidence |
 | Skipping contract tests for "internal" APIs | Internal APIs break consumers just as often | Apply the same discipline to internal service boundaries |
+
+## Related Skills
+
+- **api-versioning** — contracts catch breaking changes before a new API version ships
+- **loose-coupling** — contracts enforce discipline at service and module boundaries
+- **code-review-discipline** — contract violations should block code review approval

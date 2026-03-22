@@ -1,6 +1,6 @@
 ---
 name: api-versioning
-description: Always apply when changing API endpoints — version breaking changes, set sunset dates, and ship new alongside old
+description: Apply when adding, removing, or modifying any API endpoint, response field, or request parameter — even "simple" additions may need versioning. Covers REST, GraphQL, and RPC changes. Sets sunset dates and ships new alongside old
 ---
 
 # API Versioning
@@ -118,3 +118,9 @@ Breaking:               Removing an endpoint
 | Running too many live versions simultaneously | Maintenance burden grows; bugs must be fixed in N versions | Limit to two live versions at a time (current + previous); accelerate sunset |
 | Not monitoring traffic to deprecated versions | Sunset arrives with consumers still using the old version | Track request counts per version; alert when a deprecated version still has active callers near the sunset date |
 | Versioning every minor change | Version proliferation; consumers cannot track the latest stable target | Only create a new version for breaking changes; additive changes land on the current version |
+
+## Related Skills
+
+- **contract-testing** — verify consumer contracts before publishing a new API version
+- **backward-compatible-migrations** — apply the same expand-contract pattern to the data layer
+- **rollback-friendly-design** — versioned APIs enable safe rollback by keeping old endpoints alive

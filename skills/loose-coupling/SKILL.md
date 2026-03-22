@@ -1,6 +1,6 @@
 ---
 name: loose-coupling
-description: Always apply when designing module or service boundaries — enforce failure isolation, explicit interfaces, and no shared state
+description: Apply when designing service or module boundaries, configuring dependency injection, adding circuit breakers or timeouts, handling errors across boundaries, or evaluating shared databases. Enforces failure isolation, explicit interfaces, and no shared state
 ---
 
 # Loose Coupling
@@ -91,6 +91,88 @@ OrderService imports StripeClient and calls it inline
 
 Dependencies should point inward (toward core domain logic), never outward toward infrastructure details.
 
+## Language Examples
+
+### TypeScript
+
+```typescript
+// Circuit breaker wrapper
+class CircuitBreaker {
+  private failures = 0
+  private lastFailure = 0
+  private state: 'closed' | 'open' | 'half-open' = 'closed'
+
+  constructor(
+    private threshold: number = 5,
+    private resetTimeout: number = 30_000
+  ) {}
+
+  async call<T>(fn: () => Promise<T>): Promise<T> {
+    if (this.state === 'open') {
+      if (Date.now() - this.lastFailure > this.resetTimeout) {
+        this.state = 'half-open'
+      } else {
+        throw new Error('Circuit breaker is open')
+      }
+    }
+
+    try {
+      const result = await fn()
+      this.failures = 0
+      this.state = 'closed'
+      return result
+    } catch (err) {
+      this.failures++
+      this.lastFailure = Date.now()
+      if (this.failures >= this.threshold) this.state = 'open'
+      throw err
+    }
+  }
+}
+
+// Usage
+const paymentBreaker = new CircuitBreaker(5, 30_000)
+const result = await paymentBreaker.call(() => chargePayment(order))
+```
+
+### Python
+
+```python
+import time
+from functools import wraps
+
+class CircuitBreaker:
+    def __init__(self, threshold: int = 5, reset_timeout: float = 30.0):
+        self.threshold = threshold
+        self.reset_timeout = reset_timeout
+        self.failures = 0
+        self.last_failure = 0.0
+        self.state = "closed"
+
+    def call(self, fn, *args, **kwargs):
+        if self.state == "open":
+            if time.monotonic() - self.last_failure > self.reset_timeout:
+                self.state = "half-open"
+            else:
+                raise RuntimeError("Circuit breaker is open")
+
+        try:
+            result = fn(*args, **kwargs)
+            self.failures = 0
+            self.state = "closed"
+            return result
+        except Exception:
+            self.failures += 1
+            self.last_failure = time.monotonic()
+            if self.failures >= self.threshold:
+                self.state = "open"
+            raise
+
+# Usage
+payment_breaker = CircuitBreaker(threshold=5, reset_timeout=30.0)
+result = payment_breaker.call(charge_payment, order)
+```
+
 ## Quick Reference
 
 | Rule | Guidance |
@@ -110,3 +192,9 @@ Dependencies should point inward (toward core domain logic), never outward towar
 | Distributed monolith | Services are split but deploy together and fail together | Enforce independent deployability; break shared libraries |
 | Calling services in critical path that are non-critical | Recommendation engine failure breaks checkout | Move non-critical calls off the critical path or degrade gracefully |
 | No graceful degradation | All-or-nothing responses; partial failures become total failures | Define what a reduced response looks like for each dependency |
+
+## Related Skills
+
+- **contract-testing** — contracts enforce interface boundaries between loosely-coupled services
+- **observability-aware-coding** — instrument every service boundary to detect failures in isolation
+- **structured-logging-and-tracing** — trace requests across loosely-coupled services to diagnose cross-boundary issues

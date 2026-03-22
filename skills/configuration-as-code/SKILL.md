@@ -1,6 +1,6 @@
 ---
 name: configuration-as-code
-description: Always apply when adding or changing configuration — all config must be version-controlled, secrets referenced by name never by value
+description: Apply when touching environment variables, .env files, feature toggle config, deployment params, infrastructure settings, or hardcoded values that should be config. All config version-controlled, secrets referenced by name never by value
 ---
 
 # Configuration as Code
@@ -97,3 +97,9 @@ config/production.yaml:
 | Applying config manually after deploy | Drift accumulates; server state diverges from source | Make the deploy pipeline apply config from source; block manual changes |
 | No validation in CI | Malformed config reaches production | Add schema validation and a dry-run apply step to the pipeline |
 | Treating config as less important than code | Config changes cause outages as often as code changes | Require the same review process for config PRs as for code PRs |
+
+## Related Skills
+
+- **feature-flags** — feature flags are a form of runtime configuration that decouples deploy from release
+- **dependency-management** — dependency versions are configuration that must be pinned and version-controlled
+- **rollback-friendly-design** — versioned configuration enables instant rollback to a known-good state

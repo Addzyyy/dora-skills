@@ -1,6 +1,6 @@
 ---
 name: code-review-discipline
-description: Always apply when reviewing code — check correctness, security, maintainability, and test coverage on every review
+description: Apply when reviewing PRs, giving code feedback, preparing code for review, or self-reviewing before opening a PR. Checks correctness, security, maintainability, and test coverage systematically
 ---
 
 # Code Review Discipline
@@ -103,3 +103,9 @@ Prefer: "Nit: `d` → `deploymentDate` — the abbreviation is ambiguous in this
 | Leaving vague feedback ("this is confusing") | Author cannot act on it | Name the specific line, explain the risk, suggest a concrete alternative |
 | Reviewing a 1000-line PR in one pass | Attention degrades; the second half gets a rubber stamp | Request the PR be split; review each piece with fresh eyes |
 | Never approving without every nit resolved | Slows delivery without improving reliability | Distinguish blocking issues (correctness, security) from non-blocking nits |
+
+## Related Skills
+
+- **small-pull-requests** — smaller PRs enable deeper, more focused reviews
+- **test-driven-development** — reviewers verify that tests cover the intended behavior, not just the implementation
+- **type-safety-and-linting** — automated static checks free reviewers to focus on logic and correctness

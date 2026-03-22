@@ -1,6 +1,6 @@
 ---
 name: observability-aware-coding
-description: Always apply when writing code that handles requests, calls external services, or makes business decisions — instrument every boundary
+description: Apply when writing request handlers, external service calls, or business logic — also when adding metrics, health endpoints, error enrichment, alerting, or SLIs/SLOs. Covers debugging production issues and monitoring. Instrument every boundary
 ---
 
 # Observability-Aware Coding
@@ -82,6 +82,61 @@ GET /metrics  → Prometheus-format counters, gauges, histograms
 | Gauge | Current state | `queue.depth`, `connections.active` |
 | Histogram | Distributions | `request.duration_ms` (enables p50/p95/p99) |
 
+## Language Examples
+
+### TypeScript
+
+```typescript
+// Instrument an external API call
+async function fetchUserProfile(userId: string): Promise<UserProfile> {
+  const start = performance.now()
+  const labels = { service: 'user-service', operation: 'get_profile' }
+
+  try {
+    const response = await fetch(`${USER_SERVICE_URL}/users/${userId}`)
+    const elapsed = performance.now() - start
+
+    metrics.histogram('external_call_duration_ms', elapsed, labels)
+    metrics.increment('external_call_total', { ...labels, status: 'success' })
+
+    return response.json()
+  } catch (error) {
+    const elapsed = performance.now() - start
+    metrics.increment('external_call_total', { ...labels, status: 'error' })
+    metrics.histogram('external_call_duration_ms', elapsed, labels)
+
+    throw new Error(`User profile fetch failed for ${userId} after ${elapsed}ms: ${error.message}`)
+  }
+}
+```
+
+### Python
+
+```python
+import time
+from metrics import histogram, increment
+
+def fetch_user_profile(user_id: str) -> dict:
+    labels = {"service": "user-service", "operation": "get_profile"}
+    start = time.monotonic()
+
+    try:
+        response = requests.get(f"{USER_SERVICE_URL}/users/{user_id}", timeout=5)
+        response.raise_for_status()
+        elapsed_ms = (time.monotonic() - start) * 1000
+
+        histogram("external_call_duration_ms", elapsed_ms, labels)
+        increment("external_call_total", {**labels, "status": "success"})
+
+        return response.json()
+    except Exception as err:
+        elapsed_ms = (time.monotonic() - start) * 1000
+        increment("external_call_total", {**labels, "status": "error"})
+        histogram("external_call_duration_ms", elapsed_ms, labels)
+
+        raise RuntimeError(f"User profile fetch failed for {user_id} after {elapsed_ms:.0f}ms: {err}")
+```
+
 ## Quick Reference
 
 | Rule | Guidance |
@@ -101,3 +156,9 @@ GET /metrics  → Prometheus-format counters, gauges, histograms
 | Missing context in errors | "database error" is not actionable | Include query, input IDs, elapsed time, and error code |
 | No readiness endpoint | Load balancer routes to a service that isn't ready | Add `/ready` that checks all dependencies |
 | Instrumenting inside loops | Counter increments per item, not per operation | Measure at the boundary of the operation, not each iteration |
+
+## Related Skills
+
+- **structured-logging-and-tracing** — structured logging is the foundation that observability metrics and alerts build on
+- **loose-coupling** — instrument every boundary between services to detect failures in isolation
+- **rollback-friendly-design** — observability signals detect regressions that trigger rollback decisions

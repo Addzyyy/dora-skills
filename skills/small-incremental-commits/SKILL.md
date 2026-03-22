@@ -1,6 +1,6 @@
 ---
 name: small-incremental-commits
-description: Always apply when committing code — each commit must be one logical change that compiles and passes tests independently
+description: Apply whenever running git commit, git add, staging changes, writing commit messages, or preparing code for review — each commit must be one logical change; split large diffs, never bundle unrelated changes
 ---
 
 # Small, Incremental Commits
@@ -91,3 +91,9 @@ Types: `feat`, `fix`, `refactor`, `test`, `chore`, `docs`
 | Squashing all commits before merge | Loses the incremental story | Squash only true work-in-progress fixups (`fixup!` commits) |
 | One commit per file | Splits a logical change artificially | Group by concept, not by file |
 | Skipping tests "just for this commit" | Breaks the independent-compile rule | Keep the test alongside the code change |
+
+## Related Skills
+
+- **trunk-based-development** — small commits enable daily integration to main with minimal conflict
+- **small-pull-requests** — focused commits are the building blocks of focused, reviewable PRs
+- **test-driven-development** — each commit should include the tests that validate its logical change

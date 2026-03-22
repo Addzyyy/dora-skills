@@ -1,6 +1,6 @@
 ---
 name: dora-overview
-description: Always apply when writing, reviewing, or planning code changes — this is the central router for all DORA engineering practices and agents
+description: Load at the START of any coding session, project planning, architecture decision, code review, or deployment planning — this is the master skill that routes to all DORA practices and agents; when in doubt, load this first
 ---
 
 # DORA Practices — Active Enforcement
@@ -22,8 +22,6 @@ When this skill is loaded, you MUST actively apply DORA practices throughout the
 ## The 4 DORA Metrics
 
 DORA (DevOps Research and Assessment) research identified four key metrics that distinguish high-performing engineering teams. These metrics measure both throughput (how fast you deliver) and stability (how reliably you deliver).
-
-## The 4 DORA Metrics
 
 ### Deployment Frequency
 How often does your team deploy to production?
@@ -87,6 +85,7 @@ Each engineering practice improves specific metrics. Use this table to target yo
 | loose-coupling | | | | X |
 | rollback-friendly-design | | | | X |
 | backward-compatible-migrations | | | X | X |
+| stop-and-clarify | | X | X | |
 
 ## Self-Assessment: Which Metric Should You Focus On?
 
@@ -118,6 +117,7 @@ Do not wait for the user to ask. When you detect any of these activities, load t
 | Planning a deployment or release | `rollback-friendly-design`, `feature-flags` |
 | Adding or updating dependencies | `dependency-management` |
 | Setting up linting or type checking | `type-safety-and-linting` |
+| Encountering ambiguity, spec gaps, or unexpected state | `stop-and-clarify` |
 
 ## Agent Checkpoints — Run These Automatically
 

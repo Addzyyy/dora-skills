@@ -1,6 +1,6 @@
 ---
 name: dependency-management
-description: Always apply when adding or updating dependencies — lock exact versions, commit lockfiles, scan for vulnerabilities
+description: Apply when running npm/pip/cargo install, adding packages, upgrading libraries, resolving lockfile conflicts, or auditing for vulnerabilities. Lock exact versions, commit lockfiles, and scan before merging
 ---
 
 # Dependency Management
@@ -113,3 +113,9 @@ Integrate into CI:
 | Ignoring vulnerability scan output | Known CVEs accumulate until they become incidents | Treat HIGH/CRITICAL as build failures; assign ownership of MEDIUM within a sprint |
 | Adding dependencies for trivial utilities | Expands the attack surface and transitive tree for no meaningful gain | Write small utilities inline; reserve dependencies for non-trivial, well-maintained libraries |
 | Deferring major version upgrades indefinitely | Creates an upgrade cliff: one day all majors must land at once | Review major updates monthly; upgrade one major at a time, with tests, on a quiet week |
+
+## Related Skills
+
+- **type-safety-and-linting** — dependency updates can introduce type errors; re-run strict checks after every upgrade
+- **configuration-as-code** — dependency versions are configuration that belongs in version-controlled files
+- **contract-testing** — dependency updates can break consumer contracts; verify contracts after upgrades

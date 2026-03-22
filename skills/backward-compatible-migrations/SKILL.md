@@ -1,6 +1,6 @@
 ---
 name: backward-compatible-migrations
-description: Always apply when writing schema changes or data migrations — use expand-contract, new columns must be nullable, schema deploys before code
+description: Apply for any database change — ALTER TABLE, new columns, index additions, column renames, data backfills, storage-layer refactors. Uses expand-contract pattern, nullable columns, and schema-before-code deploys
 ---
 
 # Backward-Compatible Migrations
@@ -106,3 +106,9 @@ These operations are not backward-compatible when paired with a simultaneous cod
 | Drop column before removing code references | Any running old instance crashes on read | Remove code references first, deploy, then drop the column |
 | Long-running migration that locks the table | All application traffic blocked during migration | Use batched updates; use CONCURRENTLY for index creation |
 | Skipping the backfill verification step | Nulls or stale data in the new column cause silent bugs | Assert row counts match and sample-check values before dropping old column |
+
+## Related Skills
+
+- **rollback-friendly-design** — migrations must preserve the ability to roll back the previous code version safely
+- **api-versioning** — apply the same expand-contract pattern to API endpoints and response schemas
+- **configuration-as-code** — migration configuration and scheduling should be version-controlled alongside code

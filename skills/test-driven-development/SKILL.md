@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: Always apply before writing any new code — write the failing test first, then implement
+description: Apply BEFORE writing any implementation code — new features, bug fixes, refactors, or any code change. The failing test MUST exist first. No exceptions. Also applies when adding tests or improving test coverage
 ---
 
 # Test-Driven Development
@@ -97,6 +97,46 @@ test("rejects transfer when balance is insufficient") {
 
 One assertion per test. If a test can fail for two different reasons, split it.
 
+## Language Examples
+
+### TypeScript (vitest/jest)
+
+```typescript
+// RED: Write the failing test first
+import { describe, it, expect } from 'vitest'
+import { calculateTotal } from './pricing'
+
+describe('calculateTotal', () => {
+  it('returns item price when no discount applies', () => {
+    expect(calculateTotal({ price: 100, discount: null })).toBe(100)
+  })
+
+  it('applies percentage discount', () => {
+    expect(calculateTotal({ price: 100, discount: { type: 'percent', value: 20 } })).toBe(80)
+  })
+
+  it('clamps total to zero when discount exceeds price', () => {
+    expect(calculateTotal({ price: 50, discount: { type: 'flat', value: 75 } })).toBe(0)
+  })
+})
+```
+
+### Python (pytest)
+
+```python
+# RED: Write the failing test first
+from pricing import calculate_total
+
+def test_returns_price_when_no_discount():
+    assert calculate_total(price=100, discount=None) == 100
+
+def test_applies_percentage_discount():
+    assert calculate_total(price=100, discount={"type": "percent", "value": 20}) == 80
+
+def test_clamps_total_to_zero():
+    assert calculate_total(price=50, discount={"type": "flat", "value": 75}) == 0
+```
+
 ## Quick Reference
 
 | Rule | Guidance |
@@ -117,3 +157,9 @@ One assertion per test. If a test can fail for two different reasons, split it.
 | Skipping the refactor step | Code passes tests but accumulates complexity | Treat refactor as mandatory; tests are the safety net for it |
 | Writing the implementation "temporarily" before the test | The test is retrofitted; intent is lost | Commit to test-first on every cycle, including small ones |
 | Large test setups shared across many tests | A change to setup breaks unrelated tests | Keep each test's setup local and minimal |
+
+## Related Skills
+
+- **small-incremental-commits** — each TDD red-green-refactor cycle produces a committable unit of work
+- **code-review-discipline** — tests demonstrate intent to reviewers and make behavior changes explicit
+- **type-safety-and-linting** — types catch errors that tests miss, and tests catch errors that types miss

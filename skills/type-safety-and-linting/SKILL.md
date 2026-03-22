@@ -1,6 +1,6 @@
 ---
 name: type-safety-and-linting
-description: Always apply when writing code in typed languages — enable strict type checking, make linting a CI gate, encode invariants in types
+description: Apply when writing any code, fixing type errors, lint warnings, or configuring TypeScript strict mode, mypy, eslint, ruff, pre-commit hooks, or CI gates — enable strict checking, encode invariants in types, treat all warnings as errors
 ---
 
 # Type Safety and Linting
@@ -87,6 +87,57 @@ pre-commit hook:
   run formatter   → auto-fix formatting, re-stage
 ```
 
+## Language Examples
+
+### TypeScript
+
+```typescript
+// Encode domain invariants in the type system
+type Brand<T, B> = T & { __brand: B }
+type PositiveAmount = Brand<number, 'PositiveAmount'>
+type EmailAddress = Brand<string, 'EmailAddress'>
+
+function toPositiveAmount(n: number): PositiveAmount {
+  if (n <= 0) throw new Error(`Amount must be positive, got ${n}`)
+  return n as PositiveAmount
+}
+
+function toEmail(s: string): EmailAddress {
+  if (!s.includes('@')) throw new Error(`Invalid email: ${s}`)
+  return s as EmailAddress
+}
+
+// Functions that accept branded types are guaranteed valid inputs
+function chargeCustomer(email: EmailAddress, amount: PositiveAmount): void {
+  // email is guaranteed to contain @, amount is guaranteed > 0
+}
+```
+
+### Python
+
+```python
+from typing import NewType
+from dataclasses import dataclass
+
+# Encode domain invariants with NewType + validated constructors
+PositiveAmount = NewType("PositiveAmount", float)
+EmailAddress = NewType("EmailAddress", str)
+
+def positive_amount(n: float) -> PositiveAmount:
+    if n <= 0:
+        raise ValueError(f"Amount must be positive, got {n}")
+    return PositiveAmount(n)
+
+def email_address(s: str) -> EmailAddress:
+    if "@" not in s:
+        raise ValueError(f"Invalid email: {s}")
+    return EmailAddress(s)
+
+# Functions that accept these types are guaranteed valid inputs
+def charge_customer(email: EmailAddress, amount: PositiveAmount) -> None:
+    ...  # email is validated, amount is validated
+```
+
 ## Quick Reference
 
 | Rule | Guidance |
@@ -106,3 +157,9 @@ pre-commit hook:
 | Annotating only public APIs | Internal code still causes runtime failures | Apply type coverage uniformly; internal code is where most bugs originate |
 | Using `any` / `unknown` to escape the type system | Removes the safety guarantee for the entire call chain downstream | Use a narrow type or a discriminated union; reserve escape hatches for genuinely dynamic boundaries |
 | Adding type checks without pre-commit hooks | Engineers discover failures only after push, slowing feedback | Install hooks locally and in CI; fail fast at the earliest checkpoint |
+
+## Related Skills
+
+- **test-driven-development** — types and tests are complementary safety nets that catch different classes of errors
+- **code-review-discipline** — automated linting frees reviewers to focus on logic and design instead of style
+- **dependency-management** — run type checks after every dependency update to catch breaking type changes

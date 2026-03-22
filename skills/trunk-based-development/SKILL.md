@@ -1,6 +1,6 @@
 ---
 name: trunk-based-development
-description: Always apply when creating branches or merging — branches must be short-lived and merge to main daily
+description: Apply when creating branches, merging, choosing branching strategy, resolving merge conflicts, setting up CI/CD, or planning releases — branches must be short-lived and merge to main daily; never use long-lived feature branches
 ---
 
 # Trunk-Based Development
@@ -86,3 +86,9 @@ The feature ships continuously; users only see it when it is ready. See the `fea
 | Skipping feature flags for large features | Forces big-bang merge at the end | Introduce flags to decouple deploy from release |
 | Only one developer integrating daily | Others still accumulate divergence | Every developer merges to main daily |
 | Disabling CI on short-lived branches | Fast merges with broken code | CI must run on every push, even small branches |
+
+## Related Skills
+
+- **feature-flags** — flags guard incomplete work merged to main so it is invisible to users
+- **small-incremental-commits** — small commits enable frequent integration with minimal merge conflict
+- **small-pull-requests** — short-lived branches naturally produce small, reviewable PRs

@@ -1,6 +1,6 @@
 ---
 name: feature-flags
-description: Always apply when shipping new features — wrap in feature flags to decouple deployment from release and enable instant rollback
+description: Apply when shipping new features, doing progressive rollouts, A/B testing, trunk-based development with incomplete work, or any risky change needing a kill switch. Wraps in flags to decouple deploy from release and enable instant rollback
 ---
 
 # Feature Flags
@@ -72,6 +72,55 @@ Deploy this to production with the flag OFF. Enable it for internal users, valid
 | Ops | Kill switch for system behavior | `enable_rate_limiting` |
 | Permission | Gate by user role or plan | `advanced_analytics` |
 
+## Language Examples
+
+### TypeScript
+
+```typescript
+// Simple feature flag check
+interface FeatureFlags {
+  [key: string]: { enabled: boolean; allowlist?: string[] }
+}
+
+function isEnabled(flags: FeatureFlags, flag: string, userId?: string): boolean {
+  const f = flags[flag]
+  if (!f) return false
+  if (f.allowlist && userId) return f.allowlist.includes(userId)
+  return f.enabled
+}
+
+// Usage in application code
+if (isEnabled(flags, 'new_checkout_flow', user.id)) {
+  return renderNewCheckout(order)
+}
+return renderLegacyCheckout(order)
+```
+
+### Python
+
+```python
+# Simple feature flag check
+from dataclasses import dataclass
+
+@dataclass
+class FeatureFlag:
+    enabled: bool = False
+    allowlist: list[str] | None = None
+
+def is_enabled(flags: dict[str, FeatureFlag], flag: str, user_id: str | None = None) -> bool:
+    f = flags.get(flag)
+    if not f:
+        return False
+    if f.allowlist and user_id:
+        return user_id in f.allowlist
+    return f.enabled
+
+# Usage in application code
+if is_enabled(flags, "new_checkout_flow", user.id):
+    return render_new_checkout(order)
+return render_legacy_checkout(order)
+```
+
 ## Quick Reference
 
 | Rule | Guidance |
@@ -91,3 +140,9 @@ Deploy this to production with the flag OFF. Enable it for internal users, valid
 | Using flags as environment config | Flags are for features, not for DB URLs or secrets | Use `configuration-as-code` for environment config |
 | No flag inventory | Unknown flags linger for years | Maintain a registry with owner and target removal date |
 | Testing only the ON path | OFF path breaks silently | CI must validate both paths |
+
+## Related Skills
+
+- **trunk-based-development** — flags enable merging incomplete features to main without exposing them to users
+- **rollback-friendly-design** — flags provide instant behavioral rollback without a redeploy
+- **configuration-as-code** — flag state is runtime configuration that should be managed and versioned

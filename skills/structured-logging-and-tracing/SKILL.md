@@ -1,6 +1,6 @@
 ---
 name: structured-logging-and-tracing
-description: Always apply when adding logging or error handling — use structured JSON logs with trace IDs, never free-form strings
+description: Apply when adding console.log, print, logger calls, error handling, debug output, or any observability — use structured JSON logs with trace/correlation IDs, never free-form strings; covers distributed tracing and log aggregation
 ---
 
 # Structured Logging and Tracing
@@ -84,6 +84,51 @@ A single `trace_id` threads through every service. Search any log store for that
 | warn | Unexpected but recoverable — retry succeeded, degraded mode active |
 | error | Operation failed and action is required — alert on this level |
 
+## Language Examples
+
+### TypeScript (pino)
+
+```typescript
+import pino from 'pino'
+
+const logger = pino({ level: 'info' })
+
+// Structured log with context
+function handleOrder(orderId: string, traceId: string) {
+  const log = logger.child({ trace_id: traceId, order_id: orderId })
+
+  log.info({ action: 'order_processing_started' }, 'Processing order')
+
+  try {
+    const result = chargePayment(orderId)
+    log.info({ action: 'payment_charged', duration_ms: result.elapsed }, 'Payment successful')
+  } catch (err) {
+    log.error({ action: 'payment_failed', error: err.message }, 'Payment failed')
+    throw err
+  }
+}
+```
+
+### Python (structlog)
+
+```python
+import structlog
+
+logger = structlog.get_logger()
+
+def handle_order(order_id: str, trace_id: str) -> None:
+    log = logger.bind(trace_id=trace_id, order_id=order_id)
+
+    log.info("order_processing_started")
+
+    try:
+        result = charge_payment(order_id)
+        log.info("payment_charged", duration_ms=result.elapsed)
+    except Exception as err:
+        log.error("payment_failed", error=str(err))
+        raise
+```
+
 ## Quick Reference
 
 | Rule | Guidance |
@@ -112,3 +157,9 @@ A single `trace_id` threads through every service. Search any log store for that
 | Generating a new trace_id per service | Breaks the trace chain | Extract the incoming `traceparent` header; only generate if absent |
 | Logging everything at INFO | Signal buried in noise | Use DEBUG for detail; INFO for events that matter |
 | Logging secrets or PII | Compliance and security exposure | Scrub sensitive fields before the log call |
+
+## Related Skills
+
+- **observability-aware-coding** — structured logging is one pillar of a complete observability strategy
+- **loose-coupling** — trace context must propagate across service boundaries to maintain correlation
+- **rollback-friendly-design** — logs and traces help detect regressions that signal when a rollback is needed
