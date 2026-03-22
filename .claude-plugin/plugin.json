@@ -4,6 +4,5 @@
   "description": "Claude Code skills and agents for engineering practices that improve DORA metrics (Deployment Frequency, Lead Time, Change Failure Rate, MTTR). 18 skills, 3 agents, enforcement hooks.",
   "repository": "",
   "license": "MIT",
-  "keywords": ["dora", "devops", "deployment", "testing", "observability", "tdd", "code-review", "agents"],
-  "hooks": "./hooks/hooks.json"
+  "keywords": ["dora", "devops", "deployment", "testing", "observability", "tdd", "code-review", "agents"]
 }
