@@ -5,7 +5,37 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cat <<'DORA'\nDORA practices are active for this session. Follow these rules:\n\n1. WRITE TESTS FIRST. No implementation code before a failing test exists.\n2. SMALL COMMITS. Each commit is one logical change. If the message needs \"and\", split it.\n3. COMMIT OFTEN. After each module or feature passes tests, commit immediately. Do not batch.\n4. LOAD SKILLS. Before writing code, load the dora-skills that apply to the task:\n   - Writing code? Load test-driven-development\n   - Creating a branch? Load trunk-based-development\n   - Making a PR? Load small-pull-requests\n   - Adding logging? Load structured-logging-and-tracing\n   - Designing boundaries? Load loose-coupling\n   - Changing APIs? Load api-versioning, contract-testing\n   - Writing migrations? Load backward-compatible-migrations\n   - Adding config? Load configuration-as-code\n   - Deploying? Load rollback-friendly-design, feature-flags\n5. RUN AGENTS at checkpoints:\n   - After completing changes: run dora-review agent\n   - Start of a new project: run dora-health-check agent\n   - When a DORA metric needs improvement: run dora-improve agent\n6. NEVER skip these practices for speed. The process IS the work.\nDORA"
+            "command": "cat <<'DORA'\n[DORA] Practices active. Before writing code:\n  1. Load the relevant DORA skill (see CLAUDE.md router table)\n  2. Write the failing test FIRST (load test-driven-development)\n  3. Work on a feature branch, not main\n  4. Commit after each passing change — do not batch\n  5. Run dora-review agent after completing changes\nDORA"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[DORA] Writing code — is there a failing test for this change? If not, write the test first.'"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[DORA] If committing: one logical change per commit. If pushing: push to feature branch, not main.'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[DORA] Checkpoint — did you: commit after passing changes? push to branch? load the relevant skill?'"
           }
         ]
       }
