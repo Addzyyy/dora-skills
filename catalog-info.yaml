@@ -1,0 +1,22 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: dora-skills
+  title: DORA Skills
+  description: 17 Claude Code skills for engineering practices that improve DORA metrics
+  annotations:
+    github.com/project-slug: Addzyyy/dora-skills
+    backstage.io/source-location: url:https://github.com/Addzyyy/dora-skills
+  tags:
+    - claude-code
+    - dora
+    - skills
+    - plugin
+  links:
+    - url: https://github.com/Addzyyy/dora-skills
+      title: Source repository
+      icon: github
+spec:
+  type: tool
+  lifecycle: production
+  owner: Addzyyy
